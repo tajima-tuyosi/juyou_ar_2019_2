@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: cad7841f42ef0ca4e84523e111fad4ad
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: 02UtsukushiMincho
+  fontNames:
+  - 02UtsukushiMincho
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5f2d07b5592872a4dafb34bd1e7083b5, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

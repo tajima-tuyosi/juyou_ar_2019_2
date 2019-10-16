@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="rex_mage" size="100.000000 56.250000" />
+    <ImageTarget name="Volcano" size="100.000000 64.898422" />
+    <ImageTarget name="rex4" size="100.000000 53.495441" />
+    <ImageTarget name="rex3" size="100.000000 57.235771" />
+    <ImageTarget name="rex2" size="100.000000 56.449165" />
+    <ImageTarget name="rex1" size="100.000000 60.389610" />
+    <ImageTarget name="Grassland" size="100.000000 75.000000" />
+    <ImageTarget name="pencil" size="100.000000 68.945312" />
+    <ImageTarget name="maggyo" size="3.000000 4.187166" />
+    <ImageTarget name="gura-donn" size="3.000000 4.187166" />
+    <ImageTarget name="rukario" size="3.000000 4.187166" />
+    <ImageTarget name="yurukyann" size="5.000000 7.110669" />
+    <ImageTarget name="gaburiasu" size="5.000000 5.000000" />
+  </Tracking>
+</QCARConfig>
