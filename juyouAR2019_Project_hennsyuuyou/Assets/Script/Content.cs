@@ -241,8 +241,16 @@ public class Content : MonoBehaviour
     //あるコレクションに画像（スクリーンショット）を差し込む
     public void Input_ScreenShot_Image(string name , Sprite sp)
     {
+        //スクショ上書きの際にこのスプライトは消したいので名づけをしておく。
+        sp.name = "screenshot";
         Image collection_image = this.transform.Find(name + "_view").GetComponent<Image>();
+        //初期スプライトは削除せずに、前回スクショされたスプライトはメモリから削除
+        Debug.Log(collection_image.sprite.name);
+        if (collection_image.sprite.name == "screenshot")
+        {
+            Destroy(collection_image.sprite.texture);
+            Destroy(collection_image.sprite);
+        }
         collection_image.sprite = sp;
     }
-
 }
