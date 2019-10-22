@@ -29,10 +29,6 @@ public class Game_Manager : MonoBehaviour
     public GameObject content;
     private RectTransform camerafinder_rect;
     public Camera camera;
-    private float scale_ratio;
-    private Vector2 camerafinder_senter;
-    private Rect rect;
-    private Vector2 pivot;
 
 
     void Awake()
@@ -67,14 +63,6 @@ public class Game_Manager : MonoBehaviour
 
         camerafinder_rect = GameObject.Find("CameraFinder").GetComponent<RectTransform>();
 
-        //canvasとスクリーンの縮尺比を出す。
-        scale_ratio = Screen.width / GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x;
-        camerafinder_senter = new Vector2(Screen.width / 2 + camerafinder_rect.anchoredPosition.x * scale_ratio, Screen.height / 2 + camerafinder_rect.anchoredPosition.y * scale_ratio);
-        //左下を軸に、横幅と縦幅を左上に向けて伸ばす
-        rect = new Rect(camerafinder_senter.x - camerafinder_rect.sizeDelta.x / 2 * scale_ratio, camerafinder_senter.y - camerafinder_rect.sizeDelta.y / 2 * scale_ratio, camerafinder_rect.sizeDelta.x * scale_ratio, camerafinder_rect.sizeDelta.y * scale_ratio);
-        pivot = new Vector2(0.5f, 0.5f); //画像中心にピボットを置く
-
-
     }
 
     void Update()
@@ -98,6 +86,14 @@ public class Game_Manager : MonoBehaviour
     //スクショを乗せるオブジェクトを引数にしてスクショ撮影、保存する
     public void CaptureScreen(GameObject obj)
     {
+        //canvasとスクリーンの縮尺比を出す。
+        float scale_ratio = Screen.width / GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x;
+        Vector2 camerafinder_senter = new Vector2(Screen.width / 2 + camerafinder_rect.anchoredPosition.x * scale_ratio, Screen.height / 2 + camerafinder_rect.anchoredPosition.y * scale_ratio);
+        //左下を軸に、横幅と縦幅を左上に向けて伸ばす
+        Rect rect = new Rect(camerafinder_senter.x - camerafinder_rect.sizeDelta.x / 2 * scale_ratio, camerafinder_senter.y - camerafinder_rect.sizeDelta.y / 2 * scale_ratio, camerafinder_rect.sizeDelta.x * scale_ratio, camerafinder_rect.sizeDelta.y * scale_ratio);
+        Vector2 pivot = new Vector2(0.5f, 0.5f); //画像中心にピボットを置く
+
+
         Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         RenderTexture rt = new RenderTexture(screenShot.width, screenShot.height, 24);
         RenderTexture prev = camera.targetTexture; //カメラ映像に値を戻せるようにprevに保存

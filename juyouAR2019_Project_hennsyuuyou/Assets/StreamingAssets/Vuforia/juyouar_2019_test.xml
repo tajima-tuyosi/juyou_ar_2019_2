@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="AR_mark_math_daen2" size="10.000000 7.395038" />
+    <ImageTarget name="mahoujin3" size="10.000000 10.017153" />
     <ImageTarget name="juyoar_poster" size="100.000000 141.384857" />
     <ImageTarget name="rex_mage" size="100.000000 56.250000" />
     <ImageTarget name="Volcano" size="100.000000 64.898422" />
