@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,6 +9,7 @@ using UnityEditor;
 //端末の縦横画面に合わせてUIの大きさ、ポジションを変更する
 public class UI_Size_Manager : MonoBehaviour
 {
+    //座標は別のスクリプトが管理するとき（collection）用
     //[Header("Width　、Heigthのみ反映")]
     [SerializeField]　bool only_width_height_move = false;
 
@@ -25,15 +25,15 @@ public class UI_Size_Manager : MonoBehaviour
     [SerializeField] float width_portrait = 100;
     [SerializeField] float height_portrait = 100;
 
-    string screen_direction = "";
+    string screen_direction = "";//縦画面か横画面かを取得
 
     //画面の向きを固定するかどうか
-#if UNITY_EDITOR //Unityエディタでテスト時
-    //エディタ実行の際の画面の向きはPortrait扱い。
-    bool not_change_screen = true;
-#else
+    #if UNITY_EDITOR //Unityエディタでテスト時
+        //(エディタ実行の際の画面の向きはPortrait扱い。)
+        bool not_change_screen = true;
+    #else
         bool not_change_screen = false;
-#endif
+    #endif
 
 
     private void Start()
@@ -49,18 +49,11 @@ public class UI_Size_Manager : MonoBehaviour
 
     void Update()
     {
-        Check_Screen_Direction();
-        //#if UNITY_EDITOR //Unityエディタでテスト時
-        //    //エディタ実行の際の画面の向きはPortrait扱い。
-        //    not_change_editor_screen = true;
-        //    Check_Screen_Direction();
-        //#else
-        //    Check_Screen_Direction();
-        //#endif
-
+        Check_Screen_Direction();//画面の向きを確認
     }
 
 
+    //画面の向きに応じてUIのサイズを変更する
     public void Check_Screen_Direction()
     {
         if (not_change_screen)
@@ -86,10 +79,9 @@ public class UI_Size_Manager : MonoBehaviour
     }
 
 
-
+    //UIのサイズを登録している値に変更
     private void Change_UI_Size(float pos_x , float pos_y , float width , float height)
     {
-        //Debug.Log(pos_x + " , " + pos_y + " , " + width + " , " + height);
         //座標は変更しない場合はそのまま
         if (!only_width_height_move)
         {

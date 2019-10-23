@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//デバッグ用。デバッグしたい時に適当なUIに付けて使用
-
+//デバッグ用。デバッグしたい時に適当なTextUIに付けて使用
 public class For_Debug : MonoBehaviour
 {
     public GameObject obj_ui;
     public bool only_width_and_height_change = false;
 
     Text text;
-    // Start is called before the first frame update
     void Start()
     {
         text = gameObject.GetComponent<Text>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        //画面の向きを表示
         if (Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight)
         {
             text.text = "横画面。角度=" + Screen.orientation + "\n座標＝" + obj_ui.GetComponent<RectTransform>().anchoredPosition + "\n大きさ＝" + obj_ui.GetComponent<RectTransform>().sizeDelta;

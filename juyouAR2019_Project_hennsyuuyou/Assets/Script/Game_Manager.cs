@@ -4,7 +4,6 @@ using UnityEngine;
 using TagGet;
 
 
-
 public class Game_Manager : MonoBehaviour
 {
     //オブジェクトとその取得状況管理用のDictionary。Sortedで自動昇順ソート
@@ -22,20 +21,19 @@ public class Game_Manager : MonoBehaviour
 
     public string[] Collection1_name = {""};
 
-    GameObject menu_UI;
-    GameObject collection_UI;
+    private GameObject menu_UI;
+    private GameObject collection_UI;
 
-        //スクショ用
-    public GameObject content;
-    private RectTransform camerafinder_rect;
-    public Camera camera;
+    //スクショ用
+    [SerializeField] GameObject content = default;
+    [SerializeField] Camera arcam = default;//ARカメラ
+    private RectTransform camerafinder_rect;//スクショ用枠オブジェクト
+    private Vector2 pivot = new Vector2(0.5f, 0.5f); //画像中心にピボットを置く
 
 
     void Awake()
     {
-        int count = 0;
         //コレクション一覧をハッシュに登録。
-        //GameObject[] collections = GameObject.FindGameObjectsWithTag("Image_Target");
         GameObject[] collections = TagUtility.getParentTagObjects("Image_Target");
         foreach (GameObject collection in collections)
         {
@@ -43,7 +41,7 @@ public class Game_Manager : MonoBehaviour
             collection_table.Add(collection.transform.GetChild(0).name, false);
         }
 
-        //add
+        //Collection1のオブジェクトの名前を保存
         GameObject[] collection1s = TagUtility.getChildTagObjects("Collection1");
         System.Array.Resize(ref Collection1_name, collection1s.Length);
         for (int i = 0 ; i< collection1s.Length ; i++)
@@ -53,9 +51,9 @@ public class Game_Manager : MonoBehaviour
         }
 
 
-        //非アクティブのメニュー、コレクション一覧UIを一度起動してスクリプトを動かしておく。
         menu_UI = GameObject.Find("Canvas").transform.Find("Collection_Check_UI").gameObject;
-        collection_UI = GameObject.Find("Canvas").transform.Find("Menu_UI").gameObject;
+        collection_UI = GameObject.Find("Canvas").transform.Find("Menu_UI").gameObject; 
+        //非アクティブのメニュー、コレクション一覧UIを一度起動してスクリプトを動かしておく。
         menu_UI.SetActive(true);
         menu_UI.SetActive(false);
         collection_UI.SetActive(true);
@@ -65,10 +63,6 @@ public class Game_Manager : MonoBehaviour
 
     }
 
-    void Update()
-    {
-
-    }
 
 
     public void Reset_Collection_Table()
@@ -86,33 +80,29 @@ public class Game_Manager : MonoBehaviour
     //スクショを乗せるオブジェクトを引数にしてスクショ撮影、保存する
     public void CaptureScreen(GameObject obj)
     {
-        //canvasとスクリーンの縮尺比を出す。
+;       
+        //縦、横画面によってスクリーンサイズ等が変わるため毎回値を取得
+        //canvasとスクリーンの縮尺比を考慮
         float scale_ratio = Screen.width / GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.x;
-        Vector2 camerafinder_senter = new Vector2(Screen.width / 2 + camerafinder_rect.anchoredPosition.x * scale_ratio, Screen.height / 2 + camerafinder_rect.anchoredPosition.y * scale_ratio);
+        Vector2 camerafinder_center = new Vector2(Screen.width / 2 + camerafinder_rect.anchoredPosition.x * scale_ratio, Screen.height / 2 + camerafinder_rect.anchoredPosition.y * scale_ratio);
         //左下を軸に、横幅と縦幅を左上に向けて伸ばす
-        Rect rect = new Rect(camerafinder_senter.x - camerafinder_rect.sizeDelta.x / 2 * scale_ratio, camerafinder_senter.y - camerafinder_rect.sizeDelta.y / 2 * scale_ratio, camerafinder_rect.sizeDelta.x * scale_ratio, camerafinder_rect.sizeDelta.y * scale_ratio);
-        Vector2 pivot = new Vector2(0.5f, 0.5f); //画像中心にピボットを置く
+        Rect rect = new Rect(camerafinder_center.x - camerafinder_rect.sizeDelta.x / 2 * scale_ratio, camerafinder_center.y - camerafinder_rect.sizeDelta.y / 2 * scale_ratio, camerafinder_rect.sizeDelta.x * scale_ratio, camerafinder_rect.sizeDelta.y * scale_ratio);
 
 
         Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         RenderTexture rt = new RenderTexture(screenShot.width, screenShot.height, 24);
-        RenderTexture prev = camera.targetTexture; //カメラ映像に値を戻せるようにprevに保存
-        camera.targetTexture = rt; //スクショ用変数を代入
-        camera.Render(); // カメラの画像をrtに取得
-        camera.targetTexture = prev;//画面をカメラに戻す
+        RenderTexture prev = arcam.targetTexture; //カメラ映像に値を戻せるようにprevに保存
+        arcam.targetTexture = rt; //スクショ用変数を代入
+        arcam.Render(); // カメラの画像をrtに取得
+        arcam.targetTexture = prev;//画面をカメラに戻す
         RenderTexture.active = rt;//rtのみアクティブ状態にする。
         screenShot.ReadPixels(new Rect(0, 0, screenShot.width, screenShot.height), 0, 0);
         screenShot.Apply(); //ReadPixcelを反映
+        Sprite sprite = Sprite.Create(screenShot, rect, pivot);//スプライト画像作成
 
-        //必要なくなったrtをメモリ削減のため削除
-        Destroy(rt);
-        Sprite sprite = Sprite.Create(screenShot, rect, pivot);
-        //メモリを圧迫しないようにTexture2Dの破棄
-        //Debug.Log("後: " + screenShot);
-        content.GetComponent<Content>().Input_ScreenShot_Image(obj.name, sprite);
-        //Destroy(screenShot);
-        //Destroy(sprite);
+        Destroy(rt);//必要なくなったrtをメモリ削減のため削除
+        content.GetComponent<Content>().Input_ScreenShot_Image(obj.name, sprite);//対象オブジェクトのコレクションに画像差し込み
+
     }
-
 
 }

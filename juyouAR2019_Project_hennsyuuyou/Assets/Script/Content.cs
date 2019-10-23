@@ -6,50 +6,45 @@ using UnityEngine.UI;
 
 //contentにアタッチ
 //コレクションの状況を確認するUIのスクリプト
-
 public class Content : MonoBehaviour
 {
-    Game_Manager game_manager_script;
-    [SerializeField] GameObject collection_image_sample; //非アクティブで見つけられないためインスペクターに表示
-    [SerializeField] GameObject collection_scroll_view; //非アクティブ回避用
+    private Game_Manager game_manager_script;
+    private GameObject get_count_top_text;//画面上に表示する取得コレクション数
+    private GameObject get_count_text;//コレクション一覧で表示する取得コレクション数
 
-    GameObject get_count_top_text;
-    GameObject get_count_text;
+
+    [SerializeField] GameObject collection_image_sample = default; //
+    [SerializeField] GameObject collection_scroll_view = default; //コレクション表示範囲取得用
 
     //Complete_Collections クラスのメソッドを呼びたすための定義
-    [SerializeField] GameObject Complete_Image;
+    [SerializeField] GameObject Complete_Image = default;
 
     //Complete_Collections Collection1がそろったときに表示するイメージ
     [SerializeField] GameObject Complete_Image_Collection1;
 
 
     [SerializeField] int collection_num_per_line = 5; //一行に置くコレクションの予定数
-    Sprite unknown_image;
-
-    string screen_direction = "";
-
-
-
+    private Sprite unknown_image;//見つけていないコレクション用の画像
+    private string screen_direction = "";
 
     void Awake()
     {
         game_manager_script = GameObject.Find("GameManager").GetComponent<Game_Manager>();
         get_count_top_text = GameObject.Find("GetCountTop").transform.Find("GetCountText").gameObject;
         get_count_text = GameObject.Find("GetCount").transform.Find("GetCountText").gameObject;
-       unknown_image = collection_image_sample.GetComponent<Image>().sprite;
-        //コレクションごとにUIを作成
-        Create_Collection_View_Object();
+        unknown_image = collection_image_sample.GetComponent<Image>().sprite;
+        Create_Collection_View_Object();//コレクションごとにUIを作成
     }
 
+    //アクティブ時にコレクションの状況更新
     private void OnEnable()
     {
         Review_Collections_Get_Status();
-
     }
 
     void Update()
     {
-        Check_Screen_Direction();
+        Check_Screen_Direction();//画面の向きを常時確認
     }
 
     public void Create_Collection_View_Object()
@@ -71,10 +66,9 @@ public class Content : MonoBehaviour
     //コレクション一覧をUI上に整列させる
     private void Alignment_Display_Collections()
     {
-        //表示範囲(背景UIのサイズ)
+        //表示範囲(背景UIのサイズ。縦、横画面によって大きさ変わるので毎回取得)
         collection_scroll_view.GetComponent<UI_Size_Manager>().Check_Screen_Direction(); //参照元の値の更新
         float frame_width = collection_scroll_view.GetComponent<RectTransform>().rect.width;
-        //Debug.Log(collection_scroll_view.GetComponent<RectTransform>().rect);
 
         //コレクションのサイズを生成済みのオブジェクトの一つから取得
         collection_image_sample.GetComponent<UI_Size_Manager>().Check_Screen_Direction(); //値の更新
@@ -144,20 +138,19 @@ public class Content : MonoBehaviour
         int complete = 0;
         foreach (KeyValuePair<string, bool> collection in game_manager_script.Collection_Table)
         {
-            //complete = を追加
             complete += Review_Collection_Get_Status(collection.Key, collection.Value);
         }
 
+        //コンプリートしていたらUI表示
         if (complete == game_manager_script.Collection_Table.Count)
         {
             Complete_Image.SetActive(true);
         }
-
-        //add
+        
+        //Collection1を所持しているかの判定
         Review_Collection1_Get_Status();
 
         //コレクション所持数をUIに反映
-        //string text = "みつけたかず　" + complete + "/" + game_manager_script.Collection_Table.Count + "コ";
         get_count_top_text.GetComponent<Text>().text = "みつけたかず\n" + complete + "/" + game_manager_script.Collection_Table.Count + "コ";
         get_count_text.GetComponent<Text>().text = "みつけたかず　" + complete + "/" + game_manager_script.Collection_Table.Count + "コ";
 
@@ -172,20 +165,16 @@ public class Content : MonoBehaviour
             return 0;
         }
 
-        //string collection_name = collection.transform.GetChild(0).name;
         Text collection_text = this.transform.Find(name + "_view").transform.Find("Collection_Text").GetComponent<Text>();
         Image collection_image = this.transform.Find(name + "_view").GetComponent<Image>();
-        if (torf)
+        if (torf)//所持しているとき
         {
-            //Sprite sp = GameObject.Find(name).GetComponent<Itemdata>().itemIcon;
-            //collection_image.sprite = sp;
-            collection_text.text = name;
-
+            collection_text.text = name;//コレクションでの名前を設定
             return 1;
         }
         else
         {
-            collection_image.sprite = unknown_image;
+            collection_image.sprite = unknown_image;//未所持用画像の差し込み
             collection_text.text = "みつけてみよう！\n(" + name + ")";
 
             return 0;
@@ -246,11 +235,14 @@ public class Content : MonoBehaviour
         Image collection_image = this.transform.Find(name + "_view").GetComponent<Image>();
         //初期スプライトは削除せずに、前回スクショされたスプライトはメモリから削除
         Debug.Log(collection_image.sprite.name);
+
         if (collection_image.sprite.name == "screenshot")
         {
             Destroy(collection_image.sprite.texture);
             Destroy(collection_image.sprite);
         }
+
         collection_image.sprite = sp;
     }
+
 }
