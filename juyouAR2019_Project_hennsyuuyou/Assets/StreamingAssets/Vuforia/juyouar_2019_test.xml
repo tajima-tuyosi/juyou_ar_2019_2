@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="ohuda" size="10.000000 21.727942" />
+    <ImageTarget name="mizuumi" size="10.000000 7.500000" />
+    <ImageTarget name="mojiretu_hazure" size="10.000000 8.296813" />
+    <ImageTarget name="nurie" size="10.000000 5.491071" />
+    <ImageTarget name="manaita_koi" size="10.000000 15.764611" />
+    <ImageTarget name="manaita_houtyou" size="10.000000 15.975904" />
     <ImageTarget name="AR_mark_math_daen2" size="10.000000 7.395038" />
     <ImageTarget name="mahoujin3" size="10.000000 10.017153" />
     <ImageTarget name="juyoar_poster" size="100.000000 141.384857" />
